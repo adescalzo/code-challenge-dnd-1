@@ -1,0 +1,702 @@
+[
+  {
+    "index": 0,
+    "id": "f4b5b928-949b-4d4a-a13b-a718a0507e3f",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "17999.31"
+  },
+  {
+    "index": 1,
+    "id": "a4de5cf1-78a0-4770-b1c2-61ae455b9f7f",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "10462.61"
+  },
+  {
+    "index": 2,
+    "id": "f720289f-1525-40e9-9f37-4d5d5f28ab20",
+    "isActive": false,
+    "zone": "Z02",
+    "value": "5295.79"
+  },
+  {
+    "index": 3,
+    "id": "54dd1a8c-4b23-47ad-8dd4-e6533b3589b1",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "9938.26"
+  },
+  {
+    "index": 4,
+    "id": "326ab580-d20d-4719-8d41-6d4bcb4584ef",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "35325.74"
+  },
+  {
+    "index": 5,
+    "id": "5183dcc2-8acf-4716-8818-21d97088c4f3",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "17772.32"
+  },
+  {
+    "index": 6,
+    "id": "3f1b0d09-76d8-41e3-a17c-4f654d5ec31b",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "3297.01"
+  },
+  {
+    "index": 7,
+    "id": "39c8b722-ec87-4d98-a1f0-4fe7cd83f5e5",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "26446.06"
+  },
+  {
+    "index": 8,
+    "id": "91c4a263-f67d-4982-8e2b-7dbb99bfaf62",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "36835.31"
+  },
+  {
+    "index": 9,
+    "id": "fc7168b8-d41d-4e14-aef2-d1b003c6d836",
+    "isActive": false,
+    "zone": "Z02",
+    "value": "2227.74"
+  },
+  {
+    "index": 10,
+    "id": "098fce3a-f5a2-4214-af9b-d27c9d4be56b",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "36727.16"
+  },
+  {
+    "index": 11,
+    "id": "29c7e157-024c-4b56-91ed-ff77f9f1704d",
+    "isActive": false,
+    "zone": "Z02",
+    "value": "15935.64"
+  },
+  {
+    "index": 12,
+    "id": "650645d4-14ff-4bcb-a94f-470f7b021d47",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "25741.07"
+  },
+  {
+    "index": 13,
+    "id": "74149017-df16-44e7-8737-4a18c978dd22",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "4490.58"
+  },
+  {
+    "index": 14,
+    "id": "34692262-1d92-4b20-bee6-3a1fc073832e",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "38883.54"
+  },
+  {
+    "index": 15,
+    "id": "fc2fe690-ac0c-490c-872d-cdd2b3ca3a71",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "304.15"
+  },
+  {
+    "index": 16,
+    "id": "b34598e1-14e1-4bdd-8712-db180db991e2",
+    "isActive": false,
+    "zone": "Z02",
+    "value": "6333.63"
+  },
+  {
+    "index": 17,
+    "id": "e70b384f-8f15-4588-af7c-d6a2e4c17354",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "31725.21"
+  },
+  {
+    "index": 18,
+    "id": "f3f3b78b-8e29-46d3-b104-571fed61ec75",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "34102.76"
+  },
+  {
+    "index": 19,
+    "id": "41b01980-d5ca-41ca-ae88-a10b2cf89258",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "25237.07"
+  },
+  {
+    "index": 20,
+    "id": "e5e78114-cd3f-45cd-8360-c846ae4252f3",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "31284.77"
+  },
+  {
+    "index": 21,
+    "id": "4b5da9eb-16f2-47c1-b8d7-ff84168c6759",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "36483.17"
+  },
+  {
+    "index": 22,
+    "id": "4032ac85-7909-4b75-9355-39ff282fc54f",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "14640.13"
+  },
+  {
+    "index": 23,
+    "id": "966c6409-131b-4bda-b98c-0e57ea4b1f7a",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "32955.16"
+  },
+  {
+    "index": 24,
+    "id": "4befa1e8-6ab2-4851-8c92-7d035dcff413",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "31117.88"
+  },
+  {
+    "index": 25,
+    "id": "98cd1157-d8d9-4c99-97c9-4dd099478e0d",
+    "isActive": false,
+    "zone": "Z02",
+    "value": "313.23"
+  },
+  {
+    "index": 26,
+    "id": "787c83df-e65a-46b3-8da0-390fd3b3615b",
+    "isActive": false,
+    "zone": "Z02",
+    "value": "36368.27"
+  },
+  {
+    "index": 27,
+    "id": "07cfcf36-9342-429f-9bd9-55af1ca7ff8a",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "7273.63"
+  },
+  {
+    "index": 28,
+    "id": "8e601fe1-8bd0-4005-885e-94f26de95c52",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "20969.23"
+  },
+  {
+    "index": 29,
+    "id": "287594d7-b600-4a16-ac99-d2078e61722d",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "24917.16"
+  },
+  {
+    "index": 30,
+    "id": "23f35249-3683-47aa-8f9d-593835733e52",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "9338.76"
+  },
+  {
+    "index": 31,
+    "id": "9657db9e-9677-4a53-beb9-223d0cf37f85",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "27505.49"
+  },
+  {
+    "index": 32,
+    "id": "2200b127-f06c-4c9d-8eeb-28ff30616ddd",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "35624.53"
+  },
+  {
+    "index": 33,
+    "id": "66d4216a-afbf-4c9d-9eff-f4eb2d76410e",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "23263.98"
+  },
+  {
+    "index": 34,
+    "id": "103ab461-a2ad-4a72-9935-82290fcef9cc",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "6141.16"
+  },
+  {
+    "index": 35,
+    "id": "0ed7f5e7-c929-44bc-be54-bd47f141e73b",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "38751.35"
+  },
+  {
+    "index": 36,
+    "id": "c3f05571-cc1f-4d36-83b0-90d376c990f1",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "36596.08"
+  },
+  {
+    "index": 37,
+    "id": "c20b3753-5bf4-4fb0-8bc5-9990b5a098a7",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "35833.80"
+  },
+  {
+    "index": 38,
+    "id": "8f93b54d-cdbd-4404-9a66-c14845cbf4f9",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "34285.01"
+  },
+  {
+    "index": 39,
+    "id": "3bef4254-27cb-470b-b891-249959bd4f3a",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "6565.83"
+  },
+  {
+    "index": 40,
+    "id": "3fcf14fe-9f3c-4905-90a6-b029f6aba4f8",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "31949.27"
+  },
+  {
+    "index": 41,
+    "id": "38fcda62-5a64-40a0-b212-ef23d79f6df0",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "28166.07"
+  },
+  {
+    "index": 42,
+    "id": "850a169e-1316-4a2c-8c7c-77bdf45712db",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "39691.42"
+  },
+  {
+    "index": 43,
+    "id": "2dbf73bb-149b-429d-a238-9e0f49053efa",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "17586.13"
+  },
+  {
+    "index": 44,
+    "id": "ed886906-5613-4d51-a9ea-bf5dbef2a95e",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "26270.94"
+  },
+  {
+    "index": 45,
+    "id": "d2c9585b-1aa7-44ae-884f-8da8ca8aa528",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "34355.34"
+  },
+  {
+    "index": 46,
+    "id": "2899f26f-c393-4622-90de-60e60f3c49ff",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "24935.05"
+  },
+  {
+    "index": 47,
+    "id": "5241977f-f962-4cd3-a8d2-33f22a69f88b",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "32934.21"
+  },
+  {
+    "index": 48,
+    "id": "e3ec1067-94d9-49e1-be6a-af0dcddc98b5",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "9705.23"
+  },
+  {
+    "index": 49,
+    "id": "b97065de-8b3a-4d8e-828c-8bb102130c32",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "2792.93"
+  },
+  {
+    "index": 50,
+    "id": "775ba039-6c8b-4ae4-8b95-1648432244d1",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "18034.60"
+  },
+  {
+    "index": 51,
+    "id": "50752cc0-bc46-4b98-8c7c-73da279e073b",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "9158.93"
+  },
+  {
+    "index": 52,
+    "id": "0f1226ec-8592-4276-9a4f-0779583d9b07",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "11855.69"
+  },
+  {
+    "index": 53,
+    "id": "f2b16c34-d0cc-40c7-8188-5d1a0251f7f3",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "17680.90"
+  },
+  {
+    "index": 54,
+    "id": "f79bcb46-c746-4827-8a16-1b4d071ca454",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "13440.18"
+  },
+  {
+    "index": 55,
+    "id": "a0b90c7b-79c8-4415-b7c8-18ef4826b31d",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "37176.14"
+  },
+  {
+    "index": 56,
+    "id": "6b1e2a17-71e5-41be-9b9a-031bdf9cf409",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "18015.55"
+  },
+  {
+    "index": 57,
+    "id": "050bb2fb-ae58-48df-bc96-307e79cbf08e",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "31855.33"
+  },
+  {
+    "index": 58,
+    "id": "9a823c36-0700-4302-9b62-0920b5778786",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "5531.19"
+  },
+  {
+    "index": 59,
+    "id": "1c7c807e-f238-4731-b66e-50ec5a40588c",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "31804.98"
+  },
+  {
+    "index": 60,
+    "id": "357f50b5-83fa-49b5-8db8-31801e1e218d",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "5857.12"
+  },
+  {
+    "index": 61,
+    "id": "75ca0036-6ba2-44d0-babf-222080339b02",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "25294.67"
+  },
+  {
+    "index": 62,
+    "id": "3540cd0d-4d6c-4f48-a036-82a25a22a4b2",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "22497.25"
+  },
+  {
+    "index": 63,
+    "id": "a36806b4-5c22-407c-bf02-af42577ffd01",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "4361.63"
+  },
+  {
+    "index": 64,
+    "id": "7fc79144-abe0-4933-a687-6eb664012a2c",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "7311.73"
+  },
+  {
+    "index": 65,
+    "id": "08fdc1be-fd1b-4298-b8f9-09249d1ad290",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "12368.78"
+  },
+  {
+    "index": 66,
+    "id": "b5928235-7424-44b0-9d2d-d868e0a4f79a",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "39239.96"
+  },
+  {
+    "index": 67,
+    "id": "8b1ae39b-a8cc-4553-b8cb-67b9c37879a8",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "14964.87"
+  },
+  {
+    "index": 68,
+    "id": "578ac9a8-7d61-4363-ba72-74d3fe016979",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "27952.55"
+  },
+  {
+    "index": 69,
+    "id": "a0637e1e-f64d-4d4c-8ddf-dae42df3c51f",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "36590.08"
+  },
+  {
+    "index": 70,
+    "id": "16b709cb-c48a-4831-9a6e-51126b570328",
+    "isActive": false,
+    "zone": "Z02",
+    "value": "37903.32"
+  },
+  {
+    "index": 71,
+    "id": "a198ace0-7926-4941-b35b-b70f7b495ae7",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "12369.09"
+  },
+  {
+    "index": 72,
+    "id": "bfde18b3-c9a1-4282-9085-c930be974e53",
+    "isActive": false,
+    "zone": "Z02",
+    "value": "615.68"
+  },
+  {
+    "index": 73,
+    "id": "39472dac-1982-491f-a303-5785bfe496b3",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "24507.60"
+  },
+  {
+    "index": 74,
+    "id": "184fd6fb-2c81-4243-93a0-3663845adaa0",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "14844.81"
+  },
+  {
+    "index": 75,
+    "id": "06049a6c-fcb9-4e67-aabf-0c3e89c7acc2",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "11466.33"
+  },
+  {
+    "index": 76,
+    "id": "2f8eb2e2-3da1-46ac-9c52-a72ff323d916",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "2024.22"
+  },
+  {
+    "index": 77,
+    "id": "81057962-08d1-47fd-9026-c879e709fd08",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "23939.95"
+  },
+  {
+    "index": 78,
+    "id": "15877675-3b8b-4db0-b4c0-65f4d84dd5c2",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "10924.21"
+  },
+  {
+    "index": 79,
+    "id": "229c790e-78ce-4824-8b57-935d23dd5b1b",
+    "isActive": false,
+    "zone": "Z02",
+    "value": "33508.14"
+  },
+  {
+    "index": 80,
+    "id": "ba085f25-cee4-4d34-9493-6ec7f969cbc6",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "17834.20"
+  },
+  {
+    "index": 81,
+    "id": "c77a2566-b275-4e78-9eb9-053e2fed36b8",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "38170.54"
+  },
+  {
+    "index": 82,
+    "id": "34bdc11a-0934-410c-adb2-70bbe843253f",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "2566.36"
+  },
+  {
+    "index": 83,
+    "id": "224c5da2-9b1a-4c1f-b744-f4ec00c5fa7e",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "17385.47"
+  },
+  {
+    "index": 84,
+    "id": "0b49e466-5771-4c38-893f-32f10eab8720",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "26391.18"
+  },
+  {
+    "index": 85,
+    "id": "c1d753ab-b305-40c2-98ba-72541c6f49af",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "25882.16"
+  },
+  {
+    "index": 86,
+    "id": "7a520463-0332-4697-858a-29762745f1d2",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "32406.65"
+  },
+  {
+    "index": 87,
+    "id": "0e41df78-3a33-40df-818a-15647f3e325d",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "5256.85"
+  },
+  {
+    "index": 88,
+    "id": "2dd1be62-539a-44bc-a8ec-eb084bac7997",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "34171.00"
+  },
+  {
+    "index": 89,
+    "id": "422e6ec8-e9bd-4c3c-81a5-0d8ce23b93c0",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "10307.29"
+  },
+  {
+    "index": 90,
+    "id": "895aa4f4-4e77-455c-bf2d-2e4c69ec5b0f",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "9257.03"
+  },
+  {
+    "index": 91,
+    "id": "00c974d4-75bc-4670-befe-27f70aa7f1cb",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "191.03"
+  },
+  {
+    "index": 92,
+    "id": "8fee9772-145c-42b4-beec-e3ee544f671e",
+    "isActive": true,
+    "zone": "Z02",
+    "value": "11541.13"
+  },
+  {
+    "index": 93,
+    "id": "03b387b8-31f7-4708-9cef-6d27649a1366",
+    "isActive": true,
+    "zone": "Z01",
+    "value": "24705.38"
+  },
+  {
+    "index": 94,
+    "id": "69493d5c-0e5d-42a3-9045-1c00803d293c",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "6273.91"
+  },
+  {
+    "index": 95,
+    "id": "15176468-2ac3-491d-aa5c-2358e02d11e9",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "18727.25"
+  },
+  {
+    "index": 96,
+    "id": "c9538f34-18c1-41ec-bcec-6bcba5ba5931",
+    "isActive": false,
+    "zone": "Z01",
+    "value": "19385.78"
+  },
+  {
+    "index": 97,
+    "id": "1794de62-af2f-49c7-885c-2b9333ac3fd9",
+    "isActive": false,
+    "zone": "Z03",
+    "value": "15735.49"
+  },
+  {
+    "index": 98,
+    "id": "62b69dd6-beb8-4bce-8bae-d5167df7b69e",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "34150.38"
+  },
+  {
+    "index": 99,
+    "id": "a4a420c2-a128-406e-aba1-bc5414c83d6e",
+    "isActive": true,
+    "zone": "Z03",
+    "value": "13024.75"
+  }
+]

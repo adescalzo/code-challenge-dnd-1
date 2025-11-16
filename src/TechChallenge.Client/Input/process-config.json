@@ -1,0 +1,13 @@
+{
+  "JsonFilePath": "./Input/sensores.json",
+  "OutputRequests": [
+    {
+      "OutputFilePath": "./Input",
+      "OutputType": "Csv"
+    },
+    {
+      "OutputFilePath": "./Input",
+      "OutputType": "Xml"
+    }
+  ]
+}

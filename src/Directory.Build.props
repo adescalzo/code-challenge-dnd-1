@@ -1,0 +1,19 @@
+<Project>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>13</LangVersion>
+        <Nullable>enable</Nullable>
+
+        <AnalysisLevel>latest</AnalysisLevel>
+        <AnalysisMode>All</AnalysisMode>
+        <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="SonarAnalyzer.CSharp" />
+     </ItemGroup>
+</Project>
