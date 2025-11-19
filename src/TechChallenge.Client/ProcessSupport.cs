@@ -34,23 +34,34 @@ internal static class ProcessSupport
 
     }
 
-    public static async Task ProcessAsync(ISensorReaderService sensorReaderService, SensorProcessRequest processRequest)
+    public static async Task ProcessAsync(
+        ISensorReaderService sensorReaderService,
+        SensorProcessRequest processRequest,
+        bool useTask)
     {
         try
         {
             Console.WriteLine("Starting sensor data processing...");
             var result = await sensorReaderService.ProcessAsync(processRequest).ConfigureAwait(false);
 
-            if (result.IsSuccess)
+            if (result is { IsSuccess: true, Value: not null })
             {
-                Console.WriteLine("Processing completed successfully!");
-                Console.WriteLine($"Generated {result.Value!.Count} output files:");
+                Console.WriteLine("Processing completed successfully!\r\n");
+                Console.WriteLine($"Processed sensor data. Using '{(useTask ? "Tasks" : "Threads")}':");
+                Console.WriteLine("---------------------");
+                Console.WriteLine($"Start: {result.Value.StartProcess:hh:mm:ss tt z}");
+                Console.WriteLine($"End: {result.Value.EndProcess:hh:mm:ss tt z}");
+                Console.WriteLine($"Duration: {result.Value.Duration}");
+                Console.WriteLine($"Total inputs: {result.Value.TotalInputs}");
+                Console.WriteLine($"Active inputs: {result.Value.ActiveInputs}");
+                Console.WriteLine($"Max Value Sensor ID: {result.Value.MaxValueSensorId}");
+                Console.WriteLine($"Max Value Sensor ID: {result.Value.MaxValueSensorId}");
+                Console.WriteLine($"Global Average Value: {result.Value.GlobalAverageValue:F2}");
+                Console.WriteLine($"Zone Information Count: {result.Value.ZonesInformation.Count}");
 
-                foreach (var response in result.Value!)
+                foreach (var zone in result.Value.ZonesInformation)
                 {
-                    Console.WriteLine(response.Success
-                        ? $"Successful: {response.OutputType}: {response.OutputFilePath}"
-                        : $"Failed:     {response.OutputType}: Failed to generate output. {response.ErrorMessage}");
+                    Console.WriteLine($"\tZone {zone.Zone}: Avg={zone.AverageMeasurement:F2}, Active Sensors={zone.ActiveSensors}");
                 }
 
                 return;

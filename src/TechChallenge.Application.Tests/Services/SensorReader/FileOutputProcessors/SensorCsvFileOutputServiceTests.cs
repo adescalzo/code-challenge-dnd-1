@@ -5,7 +5,7 @@ using TechChallenge.Application.Services.SensorReader.FileOutputProcessors;
 
 namespace TechChallenge.Application.Tests.Services.SensorReader.FileOutputProcessors;
 
-public class SensorCsvFileOutputServiceTests
+public sealed class SensorCsvFileOutputServiceTests : IDisposable
 {
     private readonly MockFileSystem _fileSystem = new();
     private readonly IFileOutputSupport _fileOutputSupport = Substitute.For<IFileOutputSupport>();
@@ -22,15 +22,6 @@ public class SensorCsvFileOutputServiceTests
     public async Task WriteResponseAsync_ValidData_CreatesCSVFile()
     {
         // Arrange
-        var sensorData = new SensorDataAccumulation(
-            "SENSOR_001",
-            25.75,
-            ImmutableList.Create(
-                new ZoneInformation("Zone_A", 30.0, 3),
-                new ZoneInformation("Zone_B", 21.5, 2)
-            )
-        );
-
         var request = new SensorOutputRequest("/output", OutputResultType.Csv);
         const string expectedFilePath = $"/output/{FileNameDefault}.csv";
 
@@ -40,9 +31,20 @@ public class SensorCsvFileOutputServiceTests
         _fileSystem.AddDirectory("/output");
 
         // Act
-        var result = await _service.WriteResponseAsync(sensorData, request);
+        var initResult = await _service.InitializeAsync(request);
+
+        // Convert to sensor readings for the new interface
+        var sensorReadings = new List<SensorReadingModel>
+        {
+            new() { Id = "SENSOR_001", Value = 25.5f, Zone = "Zone_A", IsActive = true, Index = 1 },
+            new() { Id = "SENSOR_002", Value = 30.0f, Zone = "Zone_A", IsActive = true, Index = 2 }
+        }.ToImmutableList();
+
+        await _service.WriteAsync(sensorReadings);
+        var result = await _service.CloseAsync();
 
         // Assert
+        initResult.IsSuccess.Should().BeTrue();
         result.IsSuccess.Should().BeTrue();
         result.Value!.PathOutputFile.Should().Be(expectedFilePath);
         result.Value.OutputType.Should().Be(OutputResultType.Csv);
@@ -56,12 +58,6 @@ public class SensorCsvFileOutputServiceTests
     public async Task WriteResponseAsync_EmptyZoneData_HandlesGracefully()
     {
         // Arrange
-        var sensorData = new SensorDataAccumulation(
-            "SENSOR_001",
-            0.0,
-            ImmutableList<ZoneInformation>.Empty
-        );
-
         var request = new SensorOutputRequest("/output", OutputResultType.Csv);
         const string expectedFilePath = "/output/empty_data.csv";
 
@@ -70,9 +66,15 @@ public class SensorCsvFileOutputServiceTests
         _fileSystem.AddDirectory("/output");
 
         // Act
-        var result = await _service.WriteResponseAsync(sensorData, request);
+        var initResult = await _service.InitializeAsync(request);
+
+        // Write empty data
+        var sensorReadings = ImmutableList<SensorReadingModel>.Empty;
+        await _service.WriteAsync(sensorReadings);
+        var result = await _service.CloseAsync();
 
         // Assert
+        initResult.IsSuccess.Should().BeTrue();
         result.IsSuccess.Should().BeTrue();
         result.Value!.PathOutputFile.Should().Be(expectedFilePath);
 
@@ -86,9 +88,13 @@ public class SensorCsvFileOutputServiceTests
     {
         // Arrange
         var sensorData = new SensorDataAccumulation(
-            "SENSOR_MAX",
-            50.0,
-            ImmutableList.Create(
+            DateTime.UtcNow.AddMinutes(-10), // StartProcess
+            DateTime.UtcNow,                 // endProcess
+            "SENSOR_MAX",                    // MaxValueSensorId
+            50.0,                           // GlobalAverageValue
+            6,                              // TotalInputs
+            6,                              // ActiveInputs
+            ImmutableList.Create(           // ZonesInformation
                 new ZoneInformation("Zone_C", 60.0, 1),
                 new ZoneInformation("Zone_A", 40.0, 2),
                 new ZoneInformation("Zone_B", 50.0, 3)
@@ -103,13 +109,28 @@ public class SensorCsvFileOutputServiceTests
         _fileSystem.AddDirectory("/output");
 
         // Act
-        var result = await _service.WriteResponseAsync(sensorData, request);
+        var initResult = await _service.InitializeAsync(request);
+
+        // Convert zones to individual sensor readings
+        var sensorReadings = sensorData.ZonesInformation.Select((zone, index) =>
+            new SensorReadingModel
+            {
+                Id = $"SENSOR_{index:D3}",
+                Value = (float)zone.AverageMeasurement,
+                Zone = zone.Zone,
+                IsActive = zone.ActiveSensors > 0,
+                Index = index + 1
+            }).ToImmutableList();
+
+        await _service.WriteAsync(sensorReadings);
+        var result = await _service.CloseAsync();
 
         // Assert
+        initResult.IsSuccess.Should().BeTrue();
         result.IsSuccess.Should().BeTrue();
+        result.Value!.PathOutputFile.Should().Be(expectedFilePath);
 
         var fileContent = await _fileSystem.File.ReadAllTextAsync(expectedFilePath);
-
         fileContent.Should().NotBeEmpty();
 
         _fileOutputSupport.Received(1).CreateFullFilePath("/output", OutputResultType.Csv);
@@ -131,9 +152,13 @@ public class SensorCsvFileOutputServiceTests
         }
 
         var sensorData = new SensorDataAccumulation(
-            "SENSOR_MAX",
-            500.25,
-            zones.ToImmutableList()
+            DateTime.UtcNow.AddMinutes(-30), // StartProcess
+            DateTime.UtcNow,                 // endProcess
+            "SENSOR_MAX",                    // MaxValueSensorId
+            500.25,                         // GlobalAverageValue
+            100,                            // TotalInputs
+            100,                            // ActiveInputs
+            zones.ToImmutableList()         // ZonesInformation
         );
 
         var request = new SensorOutputRequest("/output", OutputResultType.Csv);
@@ -144,14 +169,34 @@ public class SensorCsvFileOutputServiceTests
         _fileSystem.AddDirectory("/output");
 
         // Act
-        var result = await _service.WriteResponseAsync(sensorData, request);
+        var initResult = await _service.InitializeAsync(request);
+
+        // Convert zones to individual sensor readings
+        var sensorReadings = sensorData.ZonesInformation.Select((zone, index) =>
+            new SensorReadingModel
+            {
+                Id = $"SENSOR_{index:D3}",
+                Value = (float)zone.AverageMeasurement,
+                Zone = zone.Zone,
+                IsActive = zone.ActiveSensors > 0,
+                Index = index + 1
+            }).ToImmutableList();
+
+        await _service.WriteAsync(sensorReadings);
+        var result = await _service.CloseAsync();
 
         // Assert
+        initResult.IsSuccess.Should().BeTrue();
         result.IsSuccess.Should().BeTrue();
         result.Value!.PathOutputFile.Should().Be(expectedFilePath);
 
         _fileSystem.File.Exists(expectedFilePath).Should().BeTrue();
         var fileContent = await _fileSystem.File.ReadAllTextAsync(expectedFilePath);
         fileContent.Length.Should().BeGreaterThan(1000); // Should be substantial content
+    }
+
+    public void Dispose()
+    {
+        _service.Dispose();
     }
 }

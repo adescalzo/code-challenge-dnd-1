@@ -1,3 +1,4 @@
+using System.ComponentModel.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TechChallenge.Application.Services;
@@ -8,7 +9,10 @@ namespace TechChallenge.Application;
 
 public static class SensorDependencyInjectionConfig
 {
-    public static IServiceCollection AddSensorDependencyInjection(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddSensorDependencyInjection(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        bool useTask)
     {
         ArgumentNullException.ThrowIfNull(configuration);
         services.Configure<ProcessorOptions>(configuration.GetSection(ProcessorOptions.Key));
@@ -16,7 +20,14 @@ public static class SensorDependencyInjectionConfig
         services.AddScoped<ISensorReaderService, SensorReaderService>();
         services.AddScoped<ISensorDataAccumulator, SensorDataAccumulator>();
         services.AddScoped<ISensorFileProcessor, SensorFileProcessor>();
-        services.AddScoped<ISensorOutputProcessor, SensorOutputProcessor>();
+        if (useTask)
+        {
+            services.AddScoped<ISensorOutputHandler, SensorOutputTaskHandler>();
+        }
+        else
+        {
+            services.AddScoped<ISensorOutputHandler, SensorOutputThreadHandler>();
+        }
         services.AddScoped<IFileOutputSupport, FileOutputSupport>();
         services.AddScoped<IClock, Clock>();
 

@@ -1,75 +1,114 @@
-using System.Xml.Serialization;
+using System.Xml;
 using System.IO.Abstractions;
 using System.Text;
+using System.Collections.Immutable;
+using System.Globalization;
 
 namespace TechChallenge.Application.Services.SensorReader.FileOutputProcessors;
 
-[XmlRoot("SensorInformacion")]
-public class SensorDataDto
-{
-    public string MaxValueSensorId { get; set; } = string.Empty;
-    public double GlobalAverageValue { get; set; }
-
-    [XmlArray("Zonas")]
-    [XmlArrayItem("ZonasInformacion")]
-    public ZoneInfoDto[] ZonesInformation { get; set; } = [];
-}
-
-public class ZoneInfoDto
-{
-    public string Zone { get; set; } = string.Empty;
-    public double AverageMeasurement { get; set; }
-    public int ActiveSensors { get; set; }
-}
-
-internal class SensorXmlFileOutputService(IFileSystem fileSystem, IFileOutputSupport fileOutputSupport)
+internal sealed class SensorXmlFileOutputService(IFileSystem fileSystem, IFileOutputSupport fileOutputSupport)
     : ISensorFileOutputService
 {
-    private static readonly XmlSerializer Serializer = new(typeof(SensorDataDto));
+    private string? _filePath;
+    private XmlWriter? _xmlWriter;
+    private bool _isActive = true;
 
     public OutputResultType OutputResult => OutputResultType.Xml;
 
-    public async Task<Result<WriteResponse>> WriteResponseAsync(
-        SensorDataAccumulation sensorDataAccumulation,
-        SensorOutputRequest outputRequest,
-        CancellationToken cancellationToken = default)
+    public async Task<Result> InitializeAsync(SensorOutputRequest outputRequest, CancellationToken cancellationToken = default)
     {
-        var filePath = fileOutputSupport.CreateFullFilePath(outputRequest.OutputFilePath, OutputResult);
         try
         {
-            var dto = new SensorDataDto
+            _filePath = fileOutputSupport.CreateFullFilePath(outputRequest.OutputFilePath, OutputResult);
+            var stream = fileSystem.File.Create(_filePath);
+
+            var settings = new XmlWriterSettings
             {
-                MaxValueSensorId = sensorDataAccumulation.MaxValueSensorId,
-                GlobalAverageValue = sensorDataAccumulation.GlobalAverageValue,
-                ZonesInformation = sensorDataAccumulation.ZonesInformation
-                    .Select(z => new ZoneInfoDto
-                    {
-                        Zone = z.Zone,
-                        AverageMeasurement = z.AverageMeasurement,
-                        ActiveSensors = z.ActiveSensors
-                    }).ToArray()
+                Async = true,
+                Encoding = Encoding.UTF8,
+                Indent = true,
+                IndentChars = "  "
             };
 
-            await using var fileStream = fileSystem.File.Create(filePath);
-            await using var bufferedStream = new BufferedStream(fileStream, bufferSize: 65536);
-            await using var streamWriter = new StreamWriter(bufferedStream, Encoding.UTF8);
+            _xmlWriter = XmlWriter.Create(stream, settings);
 
-            Serializer.Serialize(streamWriter, dto);
+            // Write XML declaration and root element
+            await _xmlWriter.WriteStartDocumentAsync().ConfigureAwait(false);
+            await _xmlWriter.WriteStartElementAsync(null, "SensorReadings", null).ConfigureAwait(false);
 
-            await streamWriter.FlushAsync(cancellationToken).ConfigureAwait(false);
-            await bufferedStream.FlushAsync(cancellationToken).ConfigureAwait(false);
+            _isActive = true;
 
-            return Result.Success(new WriteResponse(filePath, OutputResult));
+            return Result.Success();
         }
         catch (Exception ex)
         {
-            var deleted = fileOutputSupport.TryToDelete(filePath)
+            _isActive = false;
+            return Result.Failure(ErrorResult.Error($"Failed to initialize XML file: {ex.Message}", ex));
+        }
+    }
+
+    // WriteResponseAsync: should receive a collection to save, and will receive a different type of data
+    public async Task WriteAsync(IImmutableList<SensorReadingModel> sensorReadings, CancellationToken cancellationToken = default)
+    {
+        if (!_isActive)
+        {
+            return;
+        }
+
+        if (_xmlWriter == null)
+        {
+            throw new InvalidOperationException("Service not initialized. Call InitializeAsync first.");
+        }
+
+        foreach (var reading in sensorReadings)
+        {
+            await _xmlWriter.WriteStartElementAsync(null, "SensorReading", null).ConfigureAwait(false);
+
+            await _xmlWriter.WriteElementStringAsync(null, "Index", null, reading.Index.ToString()).ConfigureAwait(false);
+            await _xmlWriter.WriteElementStringAsync(null, "Id", null, reading.Id).ConfigureAwait(false);
+            await _xmlWriter.WriteElementStringAsync(null, "Value", null, reading.Value.ToString(CultureInfo.InvariantCulture)).ConfigureAwait(false);
+            await _xmlWriter.WriteElementStringAsync(null, "Zone", null, reading.Zone).ConfigureAwait(false);
+            await _xmlWriter.WriteElementStringAsync(null, "IsActive", null, reading.IsActive.ToString()).ConfigureAwait(false);
+
+            await _xmlWriter.WriteEndElementAsync().ConfigureAwait(false);
+        }
+
+        await _xmlWriter.FlushAsync().ConfigureAwait(false);
+    }
+
+    public async Task<Result<WriteResponse>> CloseAsync()
+    {
+        try
+        {
+            if (_xmlWriter == null)
+            {
+                return Result.Success(new WriteResponse(_filePath!, OutputResult));
+            }
+
+            await _xmlWriter.WriteEndElementAsync().ConfigureAwait(false);
+            await _xmlWriter.WriteEndDocumentAsync().ConfigureAwait(false);
+            await _xmlWriter.FlushAsync().ConfigureAwait(false);
+
+            await _xmlWriter.DisposeAsync().ConfigureAwait(false);
+            _xmlWriter = null;
+
+            return Result.Success(new WriteResponse(_filePath!, OutputResult));
+        }
+        catch (Exception ex)
+        {
+            var deleted = fileOutputSupport.TryToDelete(_filePath ?? string.Empty)
                 ? string.Empty
-                : $"Please, check to delete the file manually. {filePath}";
+                : $"Please, check to delete the file manually. {_filePath}";
 
             return Result.Failure<WriteResponse>(
-                ErrorResult.Error($"Failed to write XML file: {ex.Message}. {deleted}", ex)
+                ErrorResult.Error($"Failed to close XML file: {ex.Message}. {deleted}", ex)
             );
         }
+    }
+
+    public void Dispose()
+    {
+        _xmlWriter?.Dispose();
+        _xmlWriter = null;
     }
 }

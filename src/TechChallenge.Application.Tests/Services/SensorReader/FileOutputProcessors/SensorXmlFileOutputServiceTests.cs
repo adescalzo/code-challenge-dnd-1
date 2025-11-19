@@ -6,7 +6,7 @@ using TechChallenge.Application.Services.SensorReader.FileOutputProcessors;
 
 namespace TechChallenge.Application.Tests.Services.SensorReader.FileOutputProcessors;
 
-public class SensorXmlFileOutputServiceTests
+public sealed class SensorXmlFileOutputServiceTests : IDisposable
 {
     private readonly MockFileSystem _fileSystem = new();
     private readonly IFileOutputSupport _fileOutputSupport = Substitute.For<IFileOutputSupport>();
@@ -24,9 +24,13 @@ public class SensorXmlFileOutputServiceTests
     {
         // Arrange
         var sensorData = new SensorDataAccumulation(
-            "SENSOR_001",
-            25.75,
-            ImmutableList.Create(
+            DateTime.UtcNow.AddMinutes(-5), // StartProcess
+            DateTime.UtcNow,                // endProcess
+            "SENSOR_001",                   // MaxValueSensorId
+            25.75,                         // GlobalAverageValue
+            5,                             // TotalInputs
+            5,                             // ActiveInputs
+            ImmutableList.Create(          // ZonesInformation
                 new ZoneInformation("Zone_A", 30.0, 3),
                 new ZoneInformation("Zone_B", 21.5, 2)
             )
@@ -40,9 +44,24 @@ public class SensorXmlFileOutputServiceTests
         _fileSystem.AddDirectory("/output");
 
         // Act
-        var result = await _service.WriteResponseAsync(sensorData, request);
+        var initResult = await _service.InitializeAsync(request);
+
+        // Convert zones to individual sensor readings
+        var sensorReadings = sensorData.ZonesInformation.Select((zone, index) =>
+            new SensorReadingModel
+            {
+                Id = $"SENSOR_{index:D3}",
+                Value = (float)zone.AverageMeasurement,
+                Zone = zone.Zone,
+                IsActive = zone.ActiveSensors > 0,
+                Index = index + 1
+            }).ToImmutableList();
+
+        await _service.WriteAsync(sensorReadings);
+        var result = await _service.CloseAsync();
 
         // Assert
+        initResult.IsSuccess.Should().BeTrue();
         result.IsSuccess.Should().BeTrue();
         result.Value!.PathOutputFile.Should().Be(expectedFilePath);
         result.Value.OutputType.Should().Be(OutputResultType.Xml);
@@ -53,7 +72,7 @@ public class SensorXmlFileOutputServiceTests
 
         var doc = XDocument.Parse(xmlContent);
         doc.Root.Should().NotBeNull();
-        doc.Root!.Name.LocalName.Should().Be("SensorInformacion");
+        doc.Root!.Name.LocalName.Should().Be("SensorReadings");
     }
 
     [Fact]
@@ -61,9 +80,13 @@ public class SensorXmlFileOutputServiceTests
     {
         // Arrange
         var sensorData = new SensorDataAccumulation(
-            "SENSOR_001",
-            0.0,
-            ImmutableList<ZoneInformation>.Empty
+            DateTime.UtcNow.AddMinutes(-3), // StartProcess
+            DateTime.UtcNow,                // endProcess
+            "SENSOR_001",                   // MaxValueSensorId
+            0.0,                           // GlobalAverageValue
+            0,                             // TotalInputs
+            0,                             // ActiveInputs
+            ImmutableList<ZoneInformation>.Empty // ZonesInformation
         );
 
         var request = new SensorOutputRequest("/output", OutputResultType.Xml);
@@ -74,9 +97,24 @@ public class SensorXmlFileOutputServiceTests
         _fileSystem.AddDirectory("/output");
 
         // Act
-        var result = await _service.WriteResponseAsync(sensorData, request);
+        var initResult = await _service.InitializeAsync(request);
+
+        // Convert zones to individual sensor readings
+        var sensorReadings = sensorData.ZonesInformation.Select((zone, index) =>
+            new SensorReadingModel
+            {
+                Id = $"SENSOR_{index:D3}",
+                Value = (float)zone.AverageMeasurement,
+                Zone = zone.Zone,
+                IsActive = zone.ActiveSensors > 0,
+                Index = index + 1
+            }).ToImmutableList();
+
+        await _service.WriteAsync(sensorReadings);
+        var result = await _service.CloseAsync();
 
         // Assert
+        initResult.IsSuccess.Should().BeTrue();
         result.IsSuccess.Should().BeTrue();
         result.Value!.PathOutputFile.Should().Be(expectedFilePath);
 
@@ -93,9 +131,13 @@ public class SensorXmlFileOutputServiceTests
     {
         // Arrange
         var sensorData = new SensorDataAccumulation(
-            "SENSOR_MAX",
-            50.0,
-            ImmutableList.Create(
+            DateTime.UtcNow.AddMinutes(-8), // StartProcess
+            DateTime.UtcNow,                // endProcess
+            "SENSOR_MAX",                   // MaxValueSensorId
+            50.0,                          // GlobalAverageValue
+            3,                             // TotalInputs
+            3,                             // ActiveInputs
+            ImmutableList.Create(          // ZonesInformation
                 new ZoneInformation("Zone_C", 60.0, 1),
                 new ZoneInformation("Zone_A", 40.0, 2)
             )
@@ -109,17 +151,32 @@ public class SensorXmlFileOutputServiceTests
         _fileSystem.AddDirectory("/output");
 
         // Act
-        var result = await _service.WriteResponseAsync(sensorData, request);
+        var initResult = await _service.InitializeAsync(request);
+
+        // Convert zones to individual sensor readings
+        var sensorReadings = sensorData.ZonesInformation.Select((zone, index) =>
+            new SensorReadingModel
+            {
+                Id = $"SENSOR_{index:D3}",
+                Value = (float)zone.AverageMeasurement,
+                Zone = zone.Zone,
+                IsActive = zone.ActiveSensors > 0,
+                Index = index + 1
+            }).ToImmutableList();
+
+        await _service.WriteAsync(sensorReadings);
+        var result = await _service.CloseAsync();
 
         // Assert
+        initResult.IsSuccess.Should().BeTrue();
         result.IsSuccess.Should().BeTrue();
 
         var xmlContent = await _fileSystem.File.ReadAllTextAsync(expectedFilePath);
         var doc = XDocument.Parse(xmlContent);
 
         doc.Root.Should().NotBeNull();
-        xmlContent.Should().Contain("SENSOR_MAX");
-        xmlContent.Should().Contain("50");
+        xmlContent.Should().Contain("SENSOR_000");
+        xmlContent.Should().Contain("60");
         xmlContent.Should().Contain("Zone_A");
         xmlContent.Should().Contain("Zone_C");
 
@@ -142,9 +199,13 @@ public class SensorXmlFileOutputServiceTests
         }
 
         var sensorData = new SensorDataAccumulation(
-            "SENSOR_MAX",
-            500.25,
-            zones.ToImmutableList()
+            DateTime.UtcNow.AddMinutes(-25), // StartProcess
+            DateTime.UtcNow,                 // endProcess
+            "SENSOR_MAX",                    // MaxValueSensorId
+            500.25,                         // GlobalAverageValue
+            50,                             // TotalInputs
+            50,                             // ActiveInputs
+            zones.ToImmutableList()         // ZonesInformation
         );
 
         var request = new SensorOutputRequest("/output", OutputResultType.Xml);
@@ -155,9 +216,24 @@ public class SensorXmlFileOutputServiceTests
         _fileSystem.AddDirectory("/output");
 
         // Act
-        var result = await _service.WriteResponseAsync(sensorData, request);
+        var initResult = await _service.InitializeAsync(request);
+
+        // Convert zones to individual sensor readings
+        var sensorReadings = sensorData.ZonesInformation.Select((zone, index) =>
+            new SensorReadingModel
+            {
+                Id = $"SENSOR_{index:D3}",
+                Value = (float)zone.AverageMeasurement,
+                Zone = zone.Zone,
+                IsActive = zone.ActiveSensors > 0,
+                Index = index + 1
+            }).ToImmutableList();
+
+        await _service.WriteAsync(sensorReadings);
+        var result = await _service.CloseAsync();
 
         // Assert
+        initResult.IsSuccess.Should().BeTrue();
         result.IsSuccess.Should().BeTrue();
         result.Value!.PathOutputFile.Should().Be(expectedFilePath);
 
@@ -177,9 +253,13 @@ public class SensorXmlFileOutputServiceTests
     {
         // Arrange
         var sensorData = new SensorDataAccumulation(
-            "SENSOR_<>&\"'",
-            25.0,
-            ImmutableList.Create(
+            DateTime.UtcNow.AddMinutes(-7), // StartProcess
+            DateTime.UtcNow,                // endProcess
+            "SENSOR_<>&\"'",               // MaxValueSensorId
+            25.0,                          // GlobalAverageValue
+            1,                             // TotalInputs
+            1,                             // ActiveInputs
+            ImmutableList.Create(          // ZonesInformation
                 new ZoneInformation("Zone_<>&\"'", 30.0, 1)
             )
         );
@@ -193,9 +273,24 @@ public class SensorXmlFileOutputServiceTests
         _fileSystem.AddDirectory("/output");
 
         // Act
-        var result = await _service.WriteResponseAsync(sensorData, request);
+        var initResult = await _service.InitializeAsync(request);
+
+        // Convert zones to individual sensor readings
+        var sensorReadings = sensorData.ZonesInformation.Select((zone, index) =>
+            new SensorReadingModel
+            {
+                Id = $"SENSOR_{index:D3}",
+                Value = (float)zone.AverageMeasurement,
+                Zone = zone.Zone,
+                IsActive = zone.ActiveSensors > 0,
+                Index = index + 1
+            }).ToImmutableList();
+
+        await _service.WriteAsync(sensorReadings);
+        var result = await _service.CloseAsync();
 
         // Assert
+        initResult.IsSuccess.Should().BeTrue();
         result.IsSuccess.Should().BeTrue();
 
         var xmlContent = await _fileSystem.File.ReadAllTextAsync(expectedFilePath);
@@ -211,9 +306,13 @@ public class SensorXmlFileOutputServiceTests
     {
         // Arrange
         var sensorData = new SensorDataAccumulation(
-            string.Empty,
-            double.NaN,
-            ImmutableList.Create(
+            DateTime.UtcNow.AddMinutes(-1), // StartProcess
+            DateTime.UtcNow,                // endProcess
+            string.Empty,                   // MaxValueSensorId
+            double.NaN,                    // GlobalAverageValue
+            1,                             // TotalInputs
+            0,                             // ActiveInputs
+            ImmutableList.Create(          // ZonesInformation
                 new ZoneInformation("", 0.0, 0)
             )
         );
@@ -226,9 +325,24 @@ public class SensorXmlFileOutputServiceTests
         _fileSystem.AddDirectory("/output");
 
         // Act
-        var result = await _service.WriteResponseAsync(sensorData, request);
+        var initResult = await _service.InitializeAsync(request);
+
+        // Convert zones to individual sensor readings
+        var sensorReadings = sensorData.ZonesInformation.Select((zone, index) =>
+            new SensorReadingModel
+            {
+                Id = $"SENSOR_{index:D3}",
+                Value = (float)zone.AverageMeasurement,
+                Zone = zone.Zone,
+                IsActive = zone.ActiveSensors > 0,
+                Index = index + 1
+            }).ToImmutableList();
+
+        await _service.WriteAsync(sensorReadings);
+        var result = await _service.CloseAsync();
 
         // Assert
+        initResult.IsSuccess.Should().BeTrue();
         result.IsSuccess.Should().BeTrue();
 
         var xmlContent = await _fileSystem.File.ReadAllTextAsync(expectedFilePath);
@@ -236,5 +350,10 @@ public class SensorXmlFileOutputServiceTests
         // Verify it's valid XML
         var doc = XDocument.Parse(xmlContent);
         doc.Root.Should().NotBeNull();
+    }
+
+    public void Dispose()
+    {
+        _service.Dispose();
     }
 }

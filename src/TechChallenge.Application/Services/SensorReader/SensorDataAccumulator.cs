@@ -30,17 +30,21 @@ internal class SensorDataAccumulator : ISensorDataAccumulator, ISensorDataAccumu
 
     private double _totalSum = int.MinValue;
     private int _totalCount = int.MinValue;
+    private int _activeCount = int.MinValue;
     private string _maxValueSensorId = string.Empty;
     private float _maxValue = float.MinValue;
+    private DateTime _start = DateTime.MinValue;
 
     public ISensorDataAccumulatorReader GetReader()
     {
+        _start = DateTime.Now;
         _zoneStatistics.Clear();
         _activeSensorsByZone.Clear();
         _maxValueSensorId = string.Empty;
         _maxValue = 0f;
         _totalSum = 0;
         _totalCount = 0;
+        _activeCount = 0;
 
         return this;
     }
@@ -73,6 +77,7 @@ internal class SensorDataAccumulator : ISensorDataAccumulator, ISensorDataAccumu
             return;
         }
 
+        _activeCount++;
         _activeSensorsByZone[zone]++;
     }
 
@@ -89,8 +94,12 @@ internal class SensorDataAccumulator : ISensorDataAccumulator, ISensorDataAccumu
             );
 
         return new SensorDataAccumulation(
+            _start,
+            DateTime.Now,
             _maxValueSensorId,
             globalAverage,
+            _totalCount,
+            _activeCount,
             zonesInformation.ToImmutableList()
         );
     }

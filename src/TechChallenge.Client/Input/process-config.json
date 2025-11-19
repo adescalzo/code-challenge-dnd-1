@@ -1,5 +1,7 @@
 {
-  "JsonFilePath": "./Input/sensores.json",
+  "JsonFilePath": "./Input/sensores-big-big.json",
+  "_1_JsonFilePath": "./Input/sensores.json",
+  "_2_JsonFilePath": "./Input/sensores-big.json",
   "OutputRequests": [
     {
       "OutputFilePath": "./Input",
